@@ -1,6 +1,9 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
+from pymongo import MongoClient
+from typing import Optional
+
 from getpass import getpass
 from urllib.parse import quote_plus
 
@@ -26,8 +29,8 @@ def get_online_retail_dataset():
     os.makedirs('data', exist_ok=True)
     
     dataset_url = 'https://archive.ics.uci.edu/static/public/352/online+retail.zip'
-    zip_path = os.path.join('data', 'online_retail.zip')
-    data_file_path = os.path.join('data', 'Online Retail.xlsx')
+    zip_path = os.path.join(os.path.dirname(os.getcwd()), 'online_retail.zip')
+    data_file_path = os.path.join(os.path.dirname(os.getcwd()), 'data', 'Online Retail.xlsx')
     
     # Check if the xlsx file already exists
     if not os.path.exists(data_file_path):
@@ -43,7 +46,7 @@ def get_online_retail_dataset():
             
             # Extract the zip file
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                zip_ref.extractall('data')
+                zip_ref.extractall(os.path.dirname(data_file_path))
             
             print("Dataset downloaded and extracted successfully.")
             
@@ -61,9 +64,6 @@ def get_online_retail_dataset():
     except Exception as e:
         print(f"Error reading xlsx file: {e}")
         return None
-
-from pymongo import MongoClient
-from typing import Optional
 
 
 def load_sales_data_to_mongodb() -> Optional[int]:
